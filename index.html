@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoTA Unified Scholarship Portal | PS No. 2026238</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-navy: #0D254C;
+      --primary-saffron: #FF7A00;
+      --accent-green: #0F8A43;
+      --surface-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --danger: #DC2626;
+      --warning: #F59E0B;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: #0b1329; color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+    /* Phone Mockup Frame */
+    .phone-container {
+      width: 440px;
+      height: 900px;
+      background: var(--surface-light);
+      border-radius: 44px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 12px #1E293B;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .notch-bar {
+      height: 34px;
+      background: var(--primary-navy);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      z-index: 10;
+    }
+    .speaker-pill {
+      width: 90px;
+      height: 12px;
+      background: #000;
+      border-radius: 10px;
+    }
+
+    /* App Header */
+    .app-header {
+      background: var(--primary-navy);
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      z-index: 10;
+    }
+    .app-header .title-group h2 { font-size: 14px; font-weight: 700; }
+    .app-header .title-group p { font-size: 10.5px; color: #94A3B8; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pvtg-chip {
+      background: var(--primary-saffron);
+      color: white;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 12px;
+    }
+    .logout-btn-header {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .logout-btn-header:hover { background: rgba(255,255,255,0.25); }
+
+    /* Screen Views */
+    .screen-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: none;
+    }
+    .screen-body.active { display: block; }
+
+    /* Login Screen Specifics */
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 10px 4px;
+    }
+    .emblem-circle {
+      width: 76px;
+      height: 76px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      margin-bottom: 12px;
+      border: 2px solid #E2E8F0;
+    }
+    .login-tabs {
+      display: flex;
+      width: 100%;
+      background: #E2E8F0;
+      border-radius: 10px;
+      padding: 3px;
+      margin: 14px 0 16px;
+    }
+    .login-tab-btn {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .login-tab-btn.active {
+      background: white;
+      color: var(--primary-navy);
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Dashboard UI */
+    .welcome-card {
+      background: linear-gradient(135deg, #0D254C 0%, #1E3A8A 100%);
+      color: white;
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .welcome-card .otr-tag {
+      font-size: 11px;
+      color: #CBD5E1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .welcome-card h3 { font-size: 16px; margin: 8px 0 2px; }
+    .welcome-card p { font-size: 11.5px; color: #93C5FD; }
+
+    /* Quick Action Grid */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .action-btn {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn:hover { border-color: var(--primary-navy); transform: translateY(-2px); }
+    .action-btn .icon { font-size: 18px; margin-bottom: 4px; }
+    .action-btn span { font-size: 10px; font-weight: 600; display: block; color: var(--text-main); }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .badge {
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .badge-green { background: #DCFCE7; color: #166534; }
+    .badge-blue { background: #E0F2FE; color: #0369A1; }
+    .badge-orange { background: #FEF3C7; color: #92400E; }
+    .badge-red { background: #FEE2E2; color: #991B1B; }
+
+    /* Form Filling Interface Wizard */
+    .form-wizard-stepper {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .form-wizard-stepper::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: #E2E8F0;
+      z-index: 1;
+    }
+    .wizard-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+      cursor: pointer;
+    }
+    .wizard-step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      border: 2px solid #CBD5E1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .wizard-step.active .wizard-step-circle {
+      background: var(--primary-navy);
+      border-color: var(--primary-navy);
+      color: white;
+    }
+    .wizard-step.completed .wizard-step-circle {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: white;
+    }
+    .wizard-step-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .wizard-step.active .wizard-step-label {
+      color: var(--primary-navy);
+      font-weight: 700;
+    }
+
+    .form-section-view {
+      display: none;
+    }
+    .form-section-view.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
+      color: var(--text-main);
+      background: #F8FAFC;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--primary-navy);
+      background: white;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Timeline Stepper */
+    .step-item {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      padding-bottom: 16px;
+    }
+    .step-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 24px;
+      bottom: 0;
+      width: 2px;
+      background: #CBD5E1;
+    }
+    .step-item.done:not(:last-child)::before { background: var(--accent-green); }
+    .step-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748B;
+      z-index: 1;
+    }
+    .step-item.done .step-circle { background: var(--accent-green); color: white; }
+    .step-item.active .step-circle { background: var(--primary-saffron); color: white; }
+    .step-content h4 { font-size: 13px; font-weight: 700; }
+    .step-content p { font-size: 11.5px; color: var(--text-muted); }
+    .step-content .data-tag { font-size: 10px; color: var(--primary-navy); font-weight: 600; background: #EEF2F6; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      height: 60px;
+      background: white;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+    }
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .nav-tab.active { color: var(--primary-navy); }
+    .nav-tab .icon { font-size: 18px; }
+
+    /* Chatbot Floating Action */
+    .chat-fab {
+      position: absolute;
+      bottom: 74px;
+      right: 16px;
+      background: var(--primary-navy);
+      color: white;
+      border-radius: 28px;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(13,37,76,0.3);
+      border: 2px solid var(--primary-saffron);
+      z-index: 20;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      background: var(--primary-navy);
+      color: white;
+      border: none;
+      padding: 11px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .btn:hover { opacity: 0.95; }
+    .btn-green { background: var(--accent-green); }
+    .btn-saffron { background: var(--primary-saffron); }
+    .btn-blue { background: #2563EB; }
+
+    /* Chat Messages View */
+    .chat-bubble {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      max-width: 85%;
+    }
+    .chat-bubble.bot {
+      background: white;
+      border: 1px solid var(--border-color);
+      align-self: flex-start;
+    }
+    .chat-bubble.user {
+      background: var(--primary-navy);
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      padding: 8px 12px;
+      background: white;
+      border-top: 1px solid var(--border-color);
+    }
+    .chat-input-bar input {
+      flex: 1;
+      padding: 9px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
+      outline: none;
+    }
+
+    .quick-preset-chip {
+      background: #F1F5F9;
+      border: 1px solid var(--border-color);
+      padding: 5px 9px;
+      border-radius: 16px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 4px;
+      margin-bottom: 6px;
+    }
+    .quick-preset-chip:hover {
+      background: var(--primary-navy);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <!-- Top Notch -->
+    <div class="notch-bar">
+      <span>9:41</span>
+      <div class="speaker-pill"></div>
+      <span>5G 100%</span>
+    </div>
+
+    <!-- App Bar (Hidden on Login screen, visible once authenticated) -->
+    <div class="app-header" id="main-app-header" style="display:none;">
+      <div class="title-group">
+        <h2>Ministry of Tribal Affairs</h2>
+        <p>PS No. 2026238 • Unified Scholarship Portal</p>
+      </div>
+      <div class="header-actions">
+        <div class="pvtg-chip" id="header-category-badge">PVTG Priority</div>
+        <button class="logout-btn-header" onclick="logoutStudent()">
+          <span>🔒 Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 0: STUDENT LOGIN & REGISTRATION INTERFACE -->
+    <!-- ============================================== -->
+    <div id="screen-login" class="screen-body active">
+      <div class="login-container">
+        <!-- National Emblem Motif -->
+        <div class="emblem-circle">🏛️</div>
+        <h2 style="font-size:16px; color:var(--primary-navy); font-weight:800; margin-bottom:2px;">जनजातीय कार्य मंत्रालय</h2>
+        <p style="font-size:12px; color:var(--text-muted); font-weight:600;">Ministry of Tribal Affairs, Govt of India</p>
+        <span style="font-size:10px; background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:12px; font-weight:700; margin-top:6px;">
+          PS No. 2026238 • Unified Scholarship Portal
+        </span>
+
+        <!-- Login vs Register Tab Switcher -->
+        <div class="login-tabs">
+          <button class="login-tab-btn active" id="tab-btn-login" onclick="switchLoginTab('login')">Aadhaar / OTR Login</button>
+          <button class="login-tab-btn" id="tab-btn-register" onclick="switchLoginTab('register')">New Registration</button>
+        </div>
+
+        <!-- 1. LOGIN FORM -->
+        <div id="login-subview-login" style="width:100%; text-align:left;">
+          <div class="form-group">
+            <label>12-Digit Aadhaar / OTR Number</label>
+            <input type="text" id="login-id-input" placeholder="e.g. 9876 5432 9481" value="XXXX-XXXX-9481">
+          </div>
+
+          <div class="form-group">
+            <label>Registered Mobile Number</label>
+            <input type="text" id="login-mobile-input" placeholder="e.g. +91 98765 43210" value="+91 98765 43210">
+          </div>
+
+          <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:8px 10px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🔐</span>
+            <span style="font-size:11px; color:#166534;">UIDAI Aadhaar OTP will be sent to registered mobile.</span>
+          </div>
+
+          <button class="btn btn-green" onclick="handleStudentLogin()">
+            Verify OTP & Login to Dashboard →
+          </button>
+        </div>
+
+        <!-- 2. REGISTRATION FORM -->
+        <div id="login-subview-register" style="width:100%; text-align:left; display:none;">
+          <div class="form-group">
+            <label>Student Full Name (as on Aadhaar)</label>
+            <input type="text" id="reg-fullname" placeholder="e.g. Birsa Murmu" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tribal Category</label>
+              <select id="reg-category">
+                <option value="PVTG">PVTG (Particularly Vulnerable)</option>
+                <option value="ST" selected>ST (General Scheduled Tribe)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Community / Tribe</label>
+              <input type="text" id="reg-community" placeholder="e.g. Santhal, Gond, Bhil" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Aadhaar Number</label>
+              <input type="text" id="reg-aadhaar" placeholder="XXXX-XXXX-1234" required>
+            </div>
+            <div class="form-group">
+              <label>Annual Income (₹)</label>
+              <input type="number" id="reg-income" placeholder="150000" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Current Education Level</label>
+            <select id="reg-level">
+              <option value="Class 9">Class 9 (Secondary)</option>
+              <option value="Class 10">Class 10 (Secondary)</option>
+              <option value="Class 11-12">Class 11-12 (Higher Secondary)</option>
+              <option value="Undergraduate" selected>Undergraduate (B.Tech / B.Sc / MBBS)</option>
+              <option value="Postgraduate">Postgraduate (M.Tech / M.Sc / MBA)</option>
+              <option value="PhD">M.Phil / Ph.D. Research</option>
+              <option value="Foreign">Foreign University (Abroad)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>School / College Name</label>
+            <input type="text" id="reg-institution" placeholder="e.g. NIT Jamshedpur or Govt College" required>
+          </div>
+
+          <button class="btn btn-blue" onclick="handleStudentRegistration()">
+            Create OTR Profile & Continue →
+          </button>
+        </div>
+
+        <!-- 3. QUICK DEMO PRESET LOGIN BUTTONS -->
+        <div style="margin-top:16px; width:100%; border-top:1px solid #E2E8F0; padding-top:12px; text-align:left;">
+          <span style="font-size:10px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">OR QUICK-LOGIN AS PRE-CONFIGURED BENEFICIARY:</span>
+          <div class="quick-preset-chip" onclick="quickLoginPreset('priya')">👩 Priya Soren (NIT Jamshedpur - Top Class)</div>
+          <div class="quick-preset-chip" onclick="quickLoginPreset('ramesh')">👦 Ramesh Munda (Class 9 - Pre-Matric)</div>
+          <div class="quick-preset-chip" onclick="quickLoginPreset('sunita')">👩 Sunita Majhi (B.Sc Botany - Post-Matric)</div>
+          <div class="quick-preset-chip" onclick="quickLoginPreset('anil')">👨 Dr. Anil Baiga (Ph.D. - NFST Fellowship)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 1: CONSOLIDATED STUDENT DASHBOARD -->
+    <!-- ============================================== -->
+    <div id="screen-dashboard" class="screen-body">
+      <!-- Dynamic Welcome Card -->
+      <div class="welcome-card">
+        <div class="otr-tag">
+          <span id="card-otr">OTR: 2026-ST-88219</span>
+          <span style="color:#86EFAC;">● UIDAI eKYC Verified</span>
+        </div>
+        <h3 id="card-fullname">Welcome, Priya Soren</h3>
+        <p id="card-subdetails">NIT Jamshedpur • Birhor Community (PVTG)</p>
+      </div>
+
+      <!-- Quick Actions Grid -->
+      <div class="quick-actions">
+        <div class="action-btn" onclick="openScreen('screen-schemes')">
+          <div class="icon">🔍</div>
+          <span>Check Schemes</span>
+        </div>
+        <div class="action-btn" onclick="startFormFilling()">
+          <div class="icon">📝</div>
+          <span>Fill Form</span>
+        </div>
+        <div class="action-btn" onclick="openScreen('screen-wallet')">
+          <div class="icon">📁</div>
+          <span>Doc Wallet</span>
+        </div>
+        <div class="action-btn" onclick="openScreen('screen-tracker')">
+          <div class="icon">📊</div>
+          <span>DBT Status</span>
+        </div>
+      </div>
+
+      <!-- Big Check & Apply Banner -->
+      <div style="background:linear-gradient(135deg, #1E3A8A 0%, #0D254C 100%); color:white; border-radius:14px; padding:14px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span style="font-size:10px; background:rgba(255,255,255,0.2); padding:2px 6px; border-radius:10px; font-weight:700;">AI ELIGIBILITY ENGINE</span>
+            <h4 style="font-size:14px; margin:4px 0 2px;">5 Schemes Evaluated for You</h4>
+            <p style="font-size:11px; color:#93C5FD;" id="dash-eligible-count-text">You qualify for 2 flagship MoTA scholarships!</p>
+          </div>
+          <button class="btn btn-saffron" style="width:auto; padding:8px 12px; font-size:11px; margin:0;" onclick="openScreen('screen-schemes')">
+            Check Schemes →
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Application & DBT Banner -->
+      <div class="card" id="dashboard-application-card">
+        <div class="card-header">
+          <span class="badge badge-green" id="app-badge">Application Status</span>
+          <strong style="color:var(--primary-navy); font-size:15px;" id="app-grant-amount">₹2,35,000</strong>
+        </div>
+        <h4 style="font-size:13px; margin-bottom:4px;" id="app-scheme-title">National Scholarship for Higher Education (Top Class Scheme)</h4>
+        <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px;" id="app-meta-text">Application ID: MOTA-2026-TC-09941 • Verified via 7 Gateways</p>
+        <div style="background:#F1F5F9; border-radius:6px; height:7px; overflow:hidden; margin-bottom:8px;">
+          <div id="app-progress-bar" style="background:var(--accent-green); width:100%; height:100%;"></div>
+        </div>
+        <p style="font-size:10.5px; color:#15803D; font-weight:600;" id="app-dbt-note">Direct Benefit Transfer (DBT) Credited via PFMS to SBI (••5621)</p>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="btn btn-green" onclick="openScreen('screen-tracker')" style="padding:9px; font-size:11.5px; flex:1;">View 6-Stage Timeline</button>
+          <button class="btn btn-blue" onclick="startFormFilling()" style="padding:9px; font-size:11.5px; flex:1;">+ Apply Another</button>
+        </div>
+      </div>
+
+      <!-- 5 Schemes Preview Section -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin:14px 0 8px;">
+        <strong style="font-size:13.5px;">Flagship Schemes Overview</strong>
+        <span style="font-size:11px; color:var(--primary-navy); cursor:pointer; font-weight:600;" onclick="openScreen('screen-schemes')">See All 5 →</span>
+      </div>
+
+      <div id="dashboard-schemes-preview">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 2: 5 SCHEMES & ELIGIBILITY CHECK -->
+    <!-- ============================================== -->
+    <div id="screen-schemes" class="screen-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:15px; color:var(--primary-navy);">All 5 MoTA Schemes</h3>
+        <span class="badge badge-green" id="schemes-badge-eligible">2 Eligible</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;" id="schemes-evaluation-summary">
+        Evaluated dynamically using your verified profile.
+      </p>
+
+      <div id="full-schemes-list">
+        <!-- Dynamically rendered based on logged-in student -->
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 3: INTERACTIVE FORM FILLING INTERFACE -->
+    <!-- ============================================== -->
+    <div id="screen-form-filling" class="screen-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:14.5px; color:var(--primary-navy);">Scholarship Application Form</h3>
+        <span class="badge badge-blue">Pre-Filled</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-muted); margin-bottom:14px;">
+        Zero redundant typing: Verified fields auto-populated from your OTR & DigiLocker profile.
+      </p>
+
+      <!-- 5-Step Visual Progress Stepper -->
+      <div class="form-wizard-stepper">
+        <div class="wizard-step active" id="wiz-step-1" onclick="goToFormStep(1)">
+          <div class="wizard-step-circle">1</div>
+          <span class="wizard-step-label">Personal</span>
+        </div>
+        <div class="wizard-step" id="wiz-step-2" onclick="goToFormStep(2)">
+          <div class="wizard-step-circle">2</div>
+          <span class="wizard-step-label">Academic</span>
+        </div>
+        <div class="wizard-step" id="wiz-step-3" onclick="goToFormStep(3)">
+          <div class="wizard-step-circle">3</div>
+          <span class="wizard-step-label">Bank/DBT</span>
+        </div>
+        <div class="wizard-step" id="wiz-step-4" onclick="goToFormStep(4)">
+          <div class="wizard-step-circle">4</div>
+          <span class="wizard-step-label">Documents</span>
+        </div>
+        <div class="wizard-step" id="wiz-step-5" onclick="goToFormStep(5)">
+          <div class="wizard-step-circle">5</div>
+          <span class="wizard-step-label">Submit</span>
+        </div>
+      </div>
+
+      <form id="scholarship-main-form" onsubmit="handleFormSubmission(event)">
+        <!-- STEP 1: PERSONAL & TRIBAL DETAILS -->
+        <div class="form-section-view active" id="form-section-1">
+          <div class="card" style="border-left:4px solid var(--primary-saffron); margin-bottom:12px;">
+            <strong style="font-size:12.5px; color:var(--primary-navy);">Select Scholarship Scheme</strong>
+            <div class="form-group" style="margin-top:6px; margin-bottom:0;">
+              <select id="form-selected-scheme" onchange="updateSelectedSchemeBanner(this.value)">
+                <option value="topClass">Top Class Higher Education Scheme (IIT/NIT/AIIMS)</option>
+                <option value="postMatric">Post-Matric Scholarship for ST Students</option>
+                <option value="preMatric">Pre-Matric Scholarship for ST Students (Class 9-10)</option>
+                <option value="nfst">National Fellowship for ST (NFST - Ph.D.)</option>
+                <option value="nos">National Overseas Scholarship (NOS - Foreign)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Student Full Name (UIDAI Verified)</label>
+            <input type="text" id="form-fullname" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Aadhaar / OTR Number</label>
+              <input type="text" id="form-aadhaar" required>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="text" id="form-dob" value="14/08/2003" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tribal Category</label>
+              <select id="form-category">
+                <option value="PVTG">PVTG (Particularly Vulnerable)</option>
+                <option value="ST">ST (General Scheduled Tribe)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Community / Tribe Name</label>
+              <input type="text" id="form-community" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Domicile State</label>
+              <input type="text" id="form-state" value="Jharkhand" required>
+            </div>
+            <div class="form-group">
+              <label>District</label>
+              <input type="text" id="form-district" value="Ranchi" required>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-blue" onclick="goToFormStep(2)">Next: Academic Details →</button>
+        </div>
+
+        <!-- STEP 2: ACADEMIC & INSTITUTION DETAILS -->
+        <div class="form-section-view" id="form-section-2">
+          <div class="form-group">
+            <label>Institution / University Name</label>
+            <input type="text" id="form-institution" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Current Course / Grade</label>
+              <input type="text" id="form-course" value="B.Tech Computer Science (3rd Yr)" required>
+            </div>
+            <div class="form-group">
+              <label>Previous Year Marks (%)</label>
+              <input type="text" id="form-marks" value="84.5%" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>APAAR / ABC Academic ID</label>
+              <input type="text" id="form-apaar" required>
+            </div>
+            <div class="form-group">
+              <label>AISHE / UDISE Code</label>
+              <input type="text" id="form-aishe" value="U-0205" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Notified Top Class Institution?</label>
+            <select id="form-is-topclass">
+              <option value="yes">Yes (IIT, NIT, IIM, AIIMS, NLU)</option>
+              <option value="no">No (Regular State Institution)</option>
+            </select>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn" style="background:#64748B; flex:1;" onclick="goToFormStep(1)">← Back</button>
+            <button type="button" class="btn btn-blue" style="flex:2;" onclick="goToFormStep(3)">Next: Bank Details →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: FINANCIAL & BANK DETAILS -->
+        <div class="form-section-view" id="form-section-3">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Family Annual Income (₹)</label>
+              <input type="number" id="form-income" required>
+            </div>
+            <div class="form-group">
+              <label>Income Certificate No.</label>
+              <input type="text" id="form-inc-cert" value="JH/INC/2026/11094" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Bank Name for Direct Benefit Transfer</label>
+            <input type="text" id="form-bank" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Account Number</label>
+              <input type="text" id="form-account" required>
+            </div>
+            <div class="form-group">
+              <label>IFSC Code</label>
+              <input type="text" id="form-ifsc" value="SBIN0001882" required>
+            </div>
+          </div>
+
+          <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:10px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">✅</span>
+            <span style="font-size:11px; color:#166534; font-weight:600;">Account verified as Aadhaar-Seeded in NPCI Mapper for DBT disbursement.</span>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn" style="background:#64748B; flex:1;" onclick="goToFormStep(2)">← Back</button>
+            <button type="button" class="btn btn-blue" style="flex:2;" onclick="goToFormStep(4)">Next: Digital Wallet Docs →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: DIGITAL DOCUMENT WALLET ATTACHMENTS -->
+        <div class="form-section-view" id="form-section-4">
+          <div style="background:#0F766E; color:white; border-radius:10px; padding:10px 12px; margin-bottom:12px;">
+            <strong style="font-size:12px;">📁 DigiLocker Auto-Attached Documents</strong>
+            <p style="font-size:10.5px; opacity:0.9;">Legally valid digital certificates with issuer cryptographic signatures.</p>
+          </div>
+
+          <div class="card" style="margin-bottom:8px; padding:10px 12px;">
+            <div class="card-header" style="margin:0;">
+              <div>
+                <strong style="font-size:12px;">Aadhaar eKYC Verified</strong>
+                <p style="font-size:10.5px; color:var(--text-muted);">UIDAI Gateway Verified</p>
+              </div>
+              <span class="badge badge-green">Attached</span>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:8px; padding:10px 12px;">
+            <div class="card-header" style="margin:0;">
+              <div>
+                <strong style="font-size:12px;">ST / PVTG Caste Certificate</strong>
+                <p style="font-size:10.5px; color:var(--text-muted);" id="form-doc-caste-label">Birhor Community • State e-District</p>
+              </div>
+              <span class="badge badge-green">Attached</span>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:8px; padding:10px 12px;">
+            <div class="card-header" style="margin:0;">
+              <div>
+                <strong style="font-size:12px;">Income Certificate</strong>
+                <p style="font-size:10.5px; color:var(--text-muted);" id="form-doc-income-label">Revenue Dept • Valid</p>
+              </div>
+              <span class="badge badge-green">Attached</span>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:14px; padding:10px 12px;">
+            <div class="card-header" style="margin:0;">
+              <div>
+                <strong style="font-size:12px;">APAAR Academic Transcript</strong>
+                <p style="font-size:10.5px; color:var(--text-muted);">ABC Credit Bank Registry</p>
+              </div>
+              <span class="badge badge-green">Attached</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn" style="background:#64748B; flex:1;" onclick="goToFormStep(3)">← Back</button>
+            <button type="button" class="btn btn-blue" style="flex:2;" onclick="goToFormStep(5)">Next: Review & Submit →</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: REVIEW, CONSENT & SUBMIT -->
+        <div class="form-section-view" id="form-section-5">
+          <div class="card" style="background:#F8FAFC; border:1px solid #CBD5E1; margin-bottom:12px;">
+            <strong style="font-size:13px; color:var(--primary-navy);">Application Summary Review</strong>
+            <div style="font-size:11.5px; line-height:1.6; margin-top:8px;">
+              <div><strong>Scheme:</strong> <span id="rev-scheme-name">Top Class Higher Education Scheme</span></div>
+              <div><strong>Applicant:</strong> <span id="rev-student-name">Priya Soren</span></div>
+              <div><strong>Category:</strong> <span id="rev-category">PVTG (Birhor)</span></div>
+              <div><strong>Institution:</strong> <span id="rev-institution">NIT Jamshedpur</span></div>
+              <div><strong>Bank Account:</strong> <span id="rev-bank">State Bank of India (••5621)</span></div>
+              <div><strong>Sanction Entitlement:</strong> <span id="rev-grant" style="color:var(--accent-green); font-weight:700;">₹2,35,000 / year</span></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:flex; align-items:flex-start; gap:8px; font-size:11px; cursor:pointer;">
+              <input type="checkbox" id="form-consent-check" checked style="margin-top:2px;">
+              <span>I hereby declare that all details provided are authentic and I consent to Ministry of Tribal Affairs verifying my records via UIDAI, DigiLocker, and State portals.</span>
+            </label>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn" style="background:#64748B; flex:1;" onclick="goToFormStep(4)">← Back</button>
+            <button type="submit" class="btn btn-green" style="flex:2; font-weight:700;">
+              🚀 Submit Application (Run 7-API Verification)
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 4: DIGITAL DOCUMENT WALLET -->
+    <!-- ============================================== -->
+    <div id="screen-wallet" class="screen-body">
+      <div style="background:#0F766E; color:white; padding:14px; border-radius:14px; margin-bottom:14px;">
+        <h4 style="font-size:13.5px;">DigiLocker Digital Document Vault</h4>
+        <p style="font-size:11px; opacity:0.85;">Tamper-proof digital certificates verified by issuer digital signatures. Zero repeated uploads.</p>
+      </div>
+
+      <div id="wallet-documents-list">
+        <!-- Dynamically populated with student's documents -->
+      </div>
+
+      <button class="btn" style="background:#0F766E;" onclick="alert('DigiLocker National Vault successfully synchronized with authentic digital signatures!')">
+        🔄 Sync Fresh Documents from DigiLocker
+      </button>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 5: 6-STAGE TRACKER & DBT -->
+    <!-- ============================================== -->
+    <div id="screen-tracker" class="screen-body">
+      <div style="background:var(--primary-navy); color:white; padding:14px; border-radius:14px; margin-bottom:14px;">
+        <span style="font-size:10.5px; color:var(--primary-saffron); font-weight:bold;">LIVE 6-STAGE TRACKER</span>
+        <h4 style="font-size:14px; margin-top:2px;" id="tracker-scheme-heading">Top Class Higher Education Scheme</h4>
+        <p style="font-size:11px; color:#CBD5E1;" id="tracker-amount-sub">Sanction: ₹2,35,000 • Direct Benefit Transfer</p>
+      </div>
+
+      <!-- 6 Transparent Stages -->
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <div class="step-content">
+          <h4>1. Application Submitted</h4>
+          <p id="tracker-step1-detail">Student profile attached with verified OTR ID</p>
+          <span class="data-tag">Status: Successfully Submitted</span>
+        </div>
+      </div>
+
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <div class="step-content">
+          <h4>2. Unified Verification Layer (7 Gateways)</h4>
+          <p>UIDAI, DigiLocker, UDISE+, APAAR, AISHE, e-District, UGC-NTA</p>
+          <span class="data-tag" style="background:#DCFCE7; color:#166534;" id="tracker-step2-badge">100% Automated Match</span>
+        </div>
+      </div>
+
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <div class="step-content">
+          <h4>3. Institution Verification</h4>
+          <p id="tracker-step3-detail">NIT Jamshedpur confirms admission & attendance</p>
+          <span class="data-tag">Status: Endorsed by College Principal</span>
+        </div>
+      </div>
+
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <div class="step-content">
+          <h4>4. Department / MoTA Review</h4>
+          <p>Ministry of Tribal Affairs Sanction Approval Committee</p>
+          <span class="data-tag">Status: Final Ministry Approval Granted</span>
+        </div>
+      </div>
+
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <div class="step-content">
+          <h4>5. Sanction Order Generation</h4>
+          <p id="tracker-step5-detail">Sanction Order: MoTA/SANCTION/2026/88219</p>
+          <span class="data-tag" id="tracker-step5-tag">Grant Released: ₹2,35,000</span>
+        </div>
+      </div>
+
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <div class="step-content">
+          <h4>6. Direct Benefit Transfer (DBT)</h4>
+          <p id="tracker-step6-detail">PFMS Gateway to SBI Account (••5621)</p>
+          <span class="data-tag" style="background:#DCFCE7; color:#166534;">PFMS UTR: SBIN0029482109</span>
+        </div>
+      </div>
+
+      <button class="btn btn-blue" style="margin-top:14px;" onclick="startFormFilling()">
+        + Apply for Another Scheme
+      </button>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 6: JAGO CHATBOT -->
+    <!-- ============================================== -->
+    <div id="screen-chat" class="screen-body">
+      <div style="display:flex; flex-direction:column; height:100%;">
+        <div style="flex:1; overflow-y:auto;" id="chat-stream">
+          <div class="chat-bubble bot" id="chat-initial-welcome">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+        <div class="chat-input-bar">
+          <input type="text" id="chat-input" placeholder="Ask JAGO anything in English/Hindi..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+          <button class="btn btn-saffron" style="width:38px; margin:0; padding:6px;" onclick="sendChatMessage()">➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating JAGO Assistant Button (Hidden on Login screen) -->
+    <div class="chat-fab" id="main-chat-fab" style="display:none;" onclick="openScreen('screen-chat')">
+      <span>🤖 Ask JAGO</span>
+    </div>
+
+    <!-- Bottom Navigation Tabs (Hidden on Login screen) -->
+    <div class="bottom-nav" id="main-bottom-nav" style="display:none;">
+      <div class="nav-tab active" onclick="openScreen('screen-dashboard')">
+        <div class="icon">🏠</div>
+        <span>Home</span>
+      </div>
+      <div class="nav-tab" onclick="openScreen('screen-schemes')">
+        <div class="icon">🎓</div>
+        <span>Schemes</span>
+      </div>
+      <div class="nav-tab" onclick="startFormFilling()">
+        <div class="icon">📝</div>
+        <span>Apply</span>
+      </div>
+      <div class="nav-tab" onclick="openScreen('screen-wallet')">
+        <div class="icon">📁</div>
+        <span>Wallet</span>
+      </div>
+      <div class="nav-tab" onclick="openScreen('screen-tracker')">
+        <div class="icon">📊</div>
+        <span>Tracker</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global Student Profile State
+    let currentStudent = {
+      fullName: 'Priya Soren',
+      category: 'PVTG',
+      community: 'Birhor (PVTG)',
+      aadhaar: 'XXXX-XXXX-9481',
+      otrId: '2026-ST-88219',
+      level: 'Undergraduate',
+      institution: 'NIT Jamshedpur',
+      isTopClass: true,
+      hasNetJrf: false,
+      annualIncome: 180000,
+      apaarId: 'APAAR-7749-3301-9923',
+      bankName: 'State Bank of India',
+      accountNumber: '•••• •••• 5621',
+      domicile: 'Jharkhand'
+    };
+
+    let selectedSchemeToApply = 'topClass';
+
+    // Preset Profiles
+    const PRESETS = {
+      priya: {
+        fullName: 'Priya Soren',
+        category: 'PVTG',
+        community: 'Birhor (PVTG)',
+        aadhaar: 'XXXX-XXXX-9481',
+        otrId: '2026-ST-88219',
+        level: 'Undergraduate',
+        institution: 'NIT Jamshedpur',
+        isTopClass: true,
+        hasNetJrf: false,
+        annualIncome: 180000,
+        apaarId: 'APAAR-7749-3301-9923',
+        bankName: 'State Bank of India',
+        accountNumber: '•••• •••• 5621',
+        domicile: 'Jharkhand'
+      },
+      ramesh: {
+        fullName: 'Ramesh Munda',
+        category: 'ST',
+        community: 'Munda',
+        aadhaar: 'XXXX-XXXX-8910',
+        otrId: '2026-ST-11029',
+        level: 'Class 9',
+        institution: 'Govt. High School Murhu',
+        isTopClass: false,
+        hasNetJrf: false,
+        annualIncome: 120000,
+        apaarId: 'UDISE-20110204901',
+        bankName: 'Bank of India',
+        accountNumber: '•••• •••• 1042',
+        domicile: 'Jharkhand'
+      },
+      sunita: {
+        fullName: 'Sunita Majhi',
+        category: 'PVTG',
+        community: 'Lodha (PVTG)',
+        aadhaar: 'XXXX-XXXX-3312',
+        otrId: '2026-ST-44910',
+        level: 'Undergraduate',
+        institution: 'MPC Autonomous College Baripada',
+        isTopClass: false,
+        hasNetJrf: false,
+        annualIncome: 160000,
+        apaarId: 'APAAR-OD-2026-11823',
+        bankName: 'State Bank of India',
+        accountNumber: '•••• •••• 9811',
+        domicile: 'Odisha'
+      },
+      anil: {
+        fullName: 'Dr. Anil Baiga',
+        category: 'PVTG',
+        community: 'Baiga (PVTG)',
+        aadhaar: 'XXXX-XXXX-7721',
+        otrId: '2026-ST-99841',
+        level: 'PhD',
+        institution: 'Indira Gandhi National Tribal University',
+        isTopClass: false,
+        hasNetJrf: true,
+        annualIncome: 210000,
+        apaarId: 'APAAR-MP-2026-77312',
+        bankName: 'Punjab National Bank',
+        accountNumber: '•••• •••• 4429',
+        domicile: 'Madhya Pradesh'
+      }
+    };
+
+    // Scheme Rules Evaluator
+    function evaluateSchemes(student) {
+      const isPVTG = student.category === 'PVTG';
+      const income = student.annualIncome;
+      const level = student.level;
+
+      const preMatricEligible = (level === 'Class 9' || level === 'Class 10') && (income <= 250000 || isPVTG);
+      const postMatricEligible = (level === 'Class 11-12' || level === 'Undergraduate' || level === 'Postgraduate') && (income <= 250000 || isPVTG);
+      const topClassEligible = (student.isTopClass === true) && (income <= 600000 || isPVTG);
+      const nfstEligible = (level === 'PhD') && (student.hasNetJrf === true);
+      const nosEligible = (level === 'Foreign') && (income <= 800000 || isPVTG);
+
+      return {
+        preMatric: {
+          key: 'preMatric',
+          code: 'PRE-MATRIC',
+          title: 'Pre-Matric Scholarship for ST Students',
+          desc: 'For tribal students in Class 9 & 10 to ensure seamless secondary transition.',
+          grant: '₹4,500/year',
+          amountNum: 4500,
+          isEligible: preMatricEligible,
+          reason: preMatricEligible ? 'Meets Class 9-10 & income requirements' : 'Requires Class 9 or 10 enrollment'
+        },
+        postMatric: {
+          key: 'postMatric',
+          code: 'POST-MATRIC',
+          title: 'Post-Matric Scholarship for ST Students',
+          desc: 'Covers Class 11, 12, ITI, Degree, and Post-Graduate tuition and living aid.',
+          grant: '₹24,000/year',
+          amountNum: 24000,
+          isEligible: postMatricEligible,
+          reason: postMatricEligible ? 'Meets post-matric level & income threshold' : 'Requires post-secondary enrollment'
+        },
+        topClass: {
+          key: 'topClass',
+          code: 'TOP-CLASS',
+          title: 'National Scholarship for Higher Education (Top Class)',
+          desc: 'Full tuition + ₹3K/mo living + ₹45K laptop grant for premier institute admissions.',
+          grant: '₹2,35,000/year',
+          amountNum: 235000,
+          isEligible: topClassEligible,
+          reason: topClassEligible ? 'Admitted to notified Top Class premier institute' : 'Requires notified Top Class institute (IIT/NIT/AIIMS)'
+        },
+        nfst: {
+          key: 'nfst',
+          code: 'NFST',
+          title: 'National Fellowship for Higher Education of ST Students',
+          desc: 'JRF @ ₹37K/mo + SRF @ ₹42K/mo for regular Ph.D. research scholars.',
+          grant: '₹4,44,000/year',
+          amountNum: 444000,
+          isEligible: nfstEligible,
+          reason: nfstEligible ? 'M.Phil/Ph.D. enrolled & UGC-NET/JRF qualified' : 'Requires M.Phil/Ph.D. & UGC-NET/JRF qualification'
+        },
+        nos: {
+          key: 'nos',
+          code: 'NOS',
+          title: 'National Overseas Scholarship for ST Students',
+          desc: 'Full funding for Master\'s and Ph.D. in QS Top 500 foreign universities.',
+          grant: '₹18,50,000/year',
+          amountNum: 1850000,
+          isEligible: nosEligible,
+          reason: nosEligible ? 'Valid foreign university admission offer' : 'Requires QS Top 500 foreign university admission'
+        }
+      };
+    }
+
+    // Refresh All UI Elements dynamically
+    function refreshAllUI() {
+      // 1. Header & Badges
+      const catBadge = document.getElementById('header-category-badge');
+      catBadge.textContent = currentStudent.category === 'PVTG' ? 'PVTG Priority' : 'ST Category';
+      catBadge.style.background = currentStudent.category === 'PVTG' ? 'var(--primary-saffron)' : 'var(--accent-green)';
+
+      // 2. Welcome Card
+      document.getElementById('card-fullname').textContent = `Welcome, ${currentStudent.fullName}`;
+      document.getElementById('card-otr').textContent = `OTR: ${currentStudent.otrId}`;
+      document.getElementById('card-subdetails').textContent = `${currentStudent.institution} • ${currentStudent.community}`;
+
+      // 3. Evaluate 5 Schemes
+      const schemes = evaluateSchemes(currentStudent);
+      const eligibleCount = Object.values(schemes).filter(s => s.isEligible).length;
+      document.getElementById('dash-eligible-count-text').textContent =
+        `You qualify for ${eligibleCount} flagship MoTA scholarship${eligibleCount === 1 ? '' : 's'}!`;
+      document.getElementById('schemes-badge-eligible').textContent = `${eligibleCount} Eligible`;
+
+      // Determine active scheme
+      let activeScheme = schemes[selectedSchemeToApply] || schemes.topClass;
+      if (!activeScheme.isEligible) {
+        // Pick first eligible if current not eligible
+        const firstElig = Object.values(schemes).find(s => s.isEligible);
+        if (firstElig) activeScheme = firstElig;
+      }
+
+      // Update Dashboard Application Card
+      document.getElementById('app-scheme-title').textContent = activeScheme.title;
+      document.getElementById('app-grant-amount').textContent = `₹${activeScheme.amountNum.toLocaleString('en-IN')}`;
+      document.getElementById('app-meta-text').textContent = `Application ID: MOTA-2026-${activeScheme.code}-09941 • 7 Gateways Verified`;
+      document.getElementById('app-dbt-note').textContent = `Direct Benefit Transfer (DBT) Credited to ${currentStudent.bankName} (${currentStudent.accountNumber})`;
+
+      // 4. Update Dashboard Preview Cards
+      const previewContainer = document.getElementById('dashboard-schemes-preview');
+      previewContainer.innerHTML = '';
+      Object.values(schemes).forEach(s => {
+        previewContainer.innerHTML += `
+          <div class="card" style="border-left: 4px solid ${s.isEligible ? 'var(--accent-green)' : '#CBD5E1'}; margin-bottom:10px;">
+            <div class="card-header">
+              <strong style="font-size:12.5px;">${s.title}</strong>
+              <span class="badge ${s.isEligible ? 'badge-green' : 'badge-orange'}">${s.isEligible ? 'ELIGIBLE' : 'NOT ELIGIBLE'}</span>
+            </div>
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">${s.desc}</p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; font-weight:700; color:var(--primary-navy);">${s.grant}</span>
+              <button onclick="startFormFillingForScheme('${s.key}')" style="background:${s.isEligible ? 'var(--primary-navy)' : '#94A3B8'}; color:white; border:none; padding:5px 10px; border-radius:6px; font-size:10.5px; font-weight:600; cursor:pointer;">
+                ${s.isEligible ? 'Apply Form 📝' : 'Check Criteria'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      // 5. Update Full Schemes List (Screen 2)
+      document.getElementById('schemes-evaluation-summary').textContent =
+        `Eligibility calculated for ${currentStudent.fullName} (${currentStudent.community}, Income: ₹${currentStudent.annualIncome.toLocaleString('en-IN')})`;
+
+      const fullList = document.getElementById('full-schemes-list');
+      fullList.innerHTML = '';
+      Object.values(schemes).forEach(s => {
+        fullList.innerHTML += `
+          <div class="card" style="border: 1px solid ${s.isEligible ? 'var(--accent-green)' : 'var(--border-color)'};">
+            <div class="card-header">
+              <span class="badge badge-blue">${s.code}</span>
+              <span class="badge ${s.isEligible ? 'badge-green' : 'badge-orange'}">${s.isEligible ? 'Eligible for You' : 'Not Eligible'}</span>
+            </div>
+            <h4 style="font-size:13.5px; margin-bottom:4px;">${s.title}</h4>
+            <p style="font-size:11.5px; color:var(--text-muted); margin-bottom:6px;">${s.desc}</p>
+            <p style="font-size:11px; color:${s.isEligible ? 'var(--accent-green)' : '#DC2626'}; font-weight:600; margin-bottom:8px;">
+              ${s.reason}
+            </p>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; padding:8px 10px; border-radius:8px;">
+              <span style="font-size:12px; font-weight:700; color:var(--primary-navy);">Grant: ${s.grant}</span>
+              <button onclick="startFormFillingForScheme('${s.key}')" class="btn ${s.isEligible ? 'btn-green' : 'btn-saffron'}" style="width:auto; margin:0; padding:6px 14px; font-size:11px;">
+                ${s.isEligible ? '📝 Fill Application Form' : 'View Requirements'}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      // 6. Pre-fill Form Filling Interface (Screen 3)
+      document.getElementById('form-fullname').value = currentStudent.fullName;
+      document.getElementById('form-aadhaar').value = currentStudent.aadhaar;
+      document.getElementById('form-category').value = currentStudent.category;
+      document.getElementById('form-community').value = currentStudent.community;
+      document.getElementById('form-institution').value = currentStudent.institution;
+      document.getElementById('form-apaar').value = currentStudent.apaarId;
+      document.getElementById('form-income').value = currentStudent.annualIncome;
+      document.getElementById('form-bank').value = currentStudent.bankName;
+      document.getElementById('form-account').value = currentStudent.accountNumber;
+      document.getElementById('form-is-topclass').value = currentStudent.isTopClass ? 'yes' : 'no';
+      document.getElementById('form-doc-caste-label').textContent = `${currentStudent.community} • State e-District Verified`;
+      document.getElementById('form-doc-income-label').textContent = `₹${currentStudent.annualIncome.toLocaleString('en-IN')} Certified by Tehsildar`;
+
+      // 7. Update Digital Document Wallet (Screen 4)
+      const walletList = document.getElementById('wallet-documents-list');
+      walletList.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <strong>Aadhaar eKYC Verified Card</strong>
+            <span class="badge badge-green">UIDAI Verified</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted);">Aadhaar: ${currentStudent.aadhaar} • Name: ${currentStudent.fullName}</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <strong>ST / PVTG Caste Certificate</strong>
+            <span class="badge badge-green">State e-District</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted);">Community: ${currentStudent.community} • Status: Authenticated</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <strong>Income Certificate (FY 2026-27)</strong>
+            <span class="badge badge-green">Revenue Dept</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted);">Family Annual Income: ₹${currentStudent.annualIncome.toLocaleString('en-IN')}</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <strong>Academic Transcript / Record</strong>
+            <span class="badge badge-green">APAAR / ABC</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted);">ID: ${currentStudent.apaarId} • Institution: ${currentStudent.institution}</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <strong>Bank Account & NPCI Aadhaar Seeding</strong>
+            <span class="badge badge-green">PFMS Active</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted);">${currentStudent.bankName} (A/C: ${currentStudent.accountNumber})</p>
+        </div>
+      `;
+
+      // 8. Update Tracker (Screen 5)
+      document.getElementById('tracker-scheme-heading').textContent = activeScheme.title;
+      document.getElementById('tracker-amount-sub').textContent = `Sanction: ${activeScheme.grant} • Direct Benefit Transfer`;
+      document.getElementById('tracker-step1-detail').textContent = `Student ${currentStudent.fullName} profile submitted with OTR: ${currentStudent.otrId}`;
+      document.getElementById('tracker-step3-detail').textContent = `${currentStudent.institution} confirms admission & enrollment records`;
+      document.getElementById('tracker-step5-tag').textContent = `Grant Released: ${activeScheme.grant}`;
+      document.getElementById('tracker-step6-detail').textContent = `PFMS Gateway to ${currentStudent.bankName} (${currentStudent.accountNumber})`;
+
+      // 9. Update JAGO Welcome Message
+      document.getElementById('chat-initial-welcome').innerHTML = `
+        Johar <strong>${currentStudent.fullName}</strong>! I am <strong>JAGO</strong>, your Ministry of Tribal Affairs digital assistant.<br><br>
+        Based on your profile (${currentStudent.institution}, ${currentStudent.community}), you are currently eligible for <strong>${activeScheme.title}</strong>!<br><br>
+        How may I help you today? Ask me about scheme benefits, application form filling, DigiLocker verification, or live DBT tracking.
+      `;
+    }
+
+    // ===================================
+    // LOGIN & REGISTRATION LOGIC
+    // ===================================
+    function switchLoginTab(tab) {
+      document.getElementById('tab-btn-login').classList.remove('active');
+      document.getElementById('tab-btn-register').classList.remove('active');
+      document.getElementById('login-subview-login').style.display = 'none';
+      document.getElementById('login-subview-register').style.display = 'none';
+
+      if (tab === 'login') {
+        document.getElementById('tab-btn-login').classList.add('active');
+        document.getElementById('login-subview-login').style.display = 'block';
+      } else {
+        document.getElementById('tab-btn-register').classList.add('active');
+        document.getElementById('login-subview-register').style.display = 'block';
+      }
+    }
+
+    function handleStudentLogin() {
+      // Simulate UIDAI Aadhaar OTP verification
+      alert('OTP sent to registered mobile •••• 43210.\n\nAuthenticating with UIDAI eKYC Gateway...');
+      loginSuccess();
+    }
+
+    function handleStudentRegistration() {
+      const name = document.getElementById('reg-fullname').value.trim();
+      const cat = document.getElementById('reg-category').value;
+      const comm = document.getElementById('reg-community').value.trim();
+      const aadh = document.getElementById('reg-aadhaar').value.trim() || 'XXXX-XXXX-9901';
+      const inc = parseFloat(document.getElementById('reg-income').value) || 150000;
+      const lvl = document.getElementById('reg-level').value;
+      const inst = document.getElementById('reg-institution').value.trim();
+
+      if (!name || !comm || !inst) {
+        alert('Please fill all mandatory registration details.');
+        return;
+      }
+
+      currentStudent = {
+        fullName: name,
+        category: cat,
+        community: `${comm} (${cat})`,
+        aadhaar: aadh,
+        otrId: `2026-ST-${Math.floor(10000 + Math.random() * 90000)}`,
+        level: lvl,
+        institution: inst,
+        isTopClass: (lvl === 'Undergraduate' || lvl === 'Postgraduate') && inst.toLowerCase().includes('nit') || inst.toLowerCase().includes('iit') || inst.toLowerCase().includes('aiims'),
+        hasNetJrf: lvl === 'PhD',
+        annualIncome: inc,
+        apaarId: `APAAR-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+        bankName: 'State Bank of India',
+        accountNumber: '•••• •••• ' + Math.floor(1000 + Math.random() * 9000),
+        domicile: 'Jharkhand'
+      };
+
+      alert(`Registration Successful for ${currentStudent.fullName}!\n\nGenerated One-Time Registration ID: ${currentStudent.otrId}\nAll 5 schemes dynamically evaluated.`);
+      loginSuccess();
+    }
+
+    function quickLoginPreset(key) {
+      if (PRESETS[key]) {
+        currentStudent = Object.assign({}, PRESETS[key]);
+        alert(`Logged in as: ${currentStudent.fullName} (${currentStudent.community})\nInstitution: ${currentStudent.institution}`);
+        loginSuccess();
+      }
+    }
+
+    function loginSuccess() {
+      // Show main app bar and bottom navigation
+      document.getElementById('main-app-header').style.display = 'flex';
+      document.getElementById('main-bottom-nav').style.display = 'flex';
+      document.getElementById('main-chat-fab').style.display = 'flex';
+
+      refreshAllUI();
+      openScreen('screen-dashboard');
+    }
+
+    function logoutStudent() {
+      // Hide main app bar and bottom nav
+      document.getElementById('main-app-header').style.display = 'none';
+      document.getElementById('main-bottom-nav').style.display = 'none';
+      document.getElementById('main-chat-fab').style.display = 'none';
+
+      openScreen('screen-login');
+      alert('You have logged out. Please sign in or register to access scholarship services.');
+    }
+
+    // ===================================
+    // FORM FILLING WIZARD LOGIC
+    // ===================================
+    function startFormFilling() {
+      goToFormStep(1);
+      openScreen('screen-form-filling');
+    }
+
+    function startFormFillingForScheme(schemeKey) {
+      selectedSchemeToApply = schemeKey;
+      document.getElementById('form-selected-scheme').value = schemeKey;
+      updateSelectedSchemeBanner(schemeKey);
+      startFormFilling();
+    }
+
+    function updateSelectedSchemeBanner(schemeKey) {
+      selectedSchemeToApply = schemeKey;
+      const schemes = evaluateSchemes(currentStudent);
+      const s = schemes[schemeKey] || schemes.topClass;
+
+      document.getElementById('rev-scheme-name').textContent = s.title;
+      document.getElementById('rev-grant').textContent = s.grant;
+    }
+
+    function goToFormStep(stepNum) {
+      // Update wizard circles
+      for (let i = 1; i <= 5; i++) {
+        const stepEl = document.getElementById(`wiz-step-${i}`);
+        stepEl.classList.remove('active', 'completed');
+        if (i < stepNum) stepEl.classList.add('completed');
+        else if (i === stepNum) stepEl.classList.add('active');
+
+        const secEl = document.getElementById(`form-section-${i}`);
+        if (secEl) secEl.classList.remove('active');
+      }
+
+      const activeSec = document.getElementById(`form-section-${stepNum}`);
+      if (activeSec) activeSec.classList.add('active');
+
+      if (stepNum === 5) {
+        // Update review screen
+        document.getElementById('rev-student-name').textContent = document.getElementById('form-fullname').value;
+        document.getElementById('rev-category').textContent = `${document.getElementById('form-category').value} (${document.getElementById('form-community').value})`;
+        document.getElementById('rev-institution').textContent = document.getElementById('form-institution').value;
+        document.getElementById('rev-bank').textContent = `${document.getElementById('form-bank').value} (${document.getElementById('form-account').value})`;
+      }
+    }
+
+    function handleFormSubmission(e) {
+      e.preventDefault();
+
+      if (!document.getElementById('form-consent-check').checked) {
+        alert('Please accept the consent declaration to continue.');
+        return;
+      }
+
+      // Update student profile with any newly edited form fields
+      currentStudent.fullName = document.getElementById('form-fullname').value.trim();
+      currentStudent.category = document.getElementById('form-category').value;
+      currentStudent.community = document.getElementById('form-community').value.trim();
+      currentStudent.institution = document.getElementById('form-institution').value.trim();
+      currentStudent.annualIncome = parseFloat(document.getElementById('form-income').value) || currentStudent.annualIncome;
+      currentStudent.bankName = document.getElementById('form-bank').value.trim();
+      currentStudent.accountNumber = document.getElementById('form-account').value.trim();
+      currentStudent.isTopClass = document.getElementById('form-is-topclass').value === 'yes';
+
+      const schemes = evaluateSchemes(currentStudent);
+      const s = schemes[selectedSchemeToApply] || schemes.topClass;
+
+      alert(
+        `🎉 Scholarship Application Submitted Successfully!\n\n` +
+        `• Scheme: ${s.title}\n` +
+        `• Application ID: MOTA-2026-${s.code}-${Math.floor(10000 + Math.random() * 90000)}\n` +
+        `• Unified Verification Layer: 7 Gateways (UIDAI, DigiLocker, AISHE, e-District) returned 100% MATCH!\n` +
+        `• Routed to Institution & MoTA Sanction Committee.`
+      );
+
+      refreshAllUI();
+      openScreen('screen-tracker');
+    }
+
+    // ===================================
+    // SCREEN SWITCHING & NAVIGATION
+    // ===================================
+    function openScreen(screenId) {
+      document.querySelectorAll('.screen-body').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+      if(screenId === 'screen-dashboard') document.querySelectorAll('.nav-tab')[0].classList.add('active');
+      if(screenId === 'screen-schemes') document.querySelectorAll('.nav-tab')[1].classList.add('active');
+      if(screenId === 'screen-form-filling') document.querySelectorAll('.nav-tab')[2].classList.add('active');
+      if(screenId === 'screen-wallet') document.querySelectorAll('.nav-tab')[3].classList.add('active');
+      if(screenId === 'screen-tracker') document.querySelectorAll('.nav-tab')[4].classList.add('active');
+    }
+
+    // ===================================
+    // JAGO CHATBOT ASSISTANT
+    // ===================================
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if(!text) return;
+
+      const stream = document.getElementById('chat-stream');
+      stream.innerHTML += `<div class="chat-bubble user">${text}</div>`;
+      input.value = '';
+
+      setTimeout(() => {
+        let reply = `Hello ${currentStudent.fullName}! I am analyzing your profile (${currentStudent.institution}, ${currentStudent.community}).`;
+        const lower = text.toLowerCase();
+        if(lower.includes("eligib") || lower.includes("पात्र") || lower.includes("scheme")) {
+          const s = evaluateSchemes(currentStudent);
+          let eligList = [];
+          if(s.topClass.isEligible) eligList.push("Top Class Scheme (" + s.topClass.grant + ")");
+          if(s.postMatric.isEligible) eligList.push("Post-Matric Scholarship (" + s.postMatric.grant + ")");
+          if(s.preMatric.isEligible) eligList.push("Pre-Matric Scholarship (" + s.preMatric.grant + ")");
+          if(s.nfst.isEligible) eligList.push("National Fellowship NFST (" + s.nfst.grant + ")");
+          if(s.nos.isEligible) eligList.push("National Overseas Scholarship NOS (" + s.nos.grant + ")");
+
+          reply = `Based on your live profile, you qualify for:<br>• <strong>${eligList.join('<br>• ')}</strong><br><br>Tap the <strong>Apply</strong> tab to fill out your application with zero redundant typing!`;
+        } else if(lower.includes("dbt") || lower.includes("payment") || lower.includes("भुगतान")) {
+          reply = `Your scholarship has been sanctioned and routed through PFMS direct benefit transfer to your Aadhaar-linked account at <strong>${currentStudent.bankName} (${currentStudent.accountNumber})</strong>!`;
+        } else if(lower.includes("form") || lower.includes("apply") || lower.includes("आवेदन")) {
+          reply = `You can fill out your scholarship application right now in the <strong>Apply</strong> tab! All your verified Aadhaar, ST/PVTG caste, and DigiLocker documents are pre-filled automatically.`;
+        } else if(lower.includes("document") || lower.includes("wallet") || lower.includes("दस्तावेज")) {
+          reply = `Your Aadhaar, ST/PVTG certificate (${currentStudent.community}), and Income certificate are cryptographically verified in your DigiLocker wallet. No repeated paper uploads are required.`;
+        }
+        stream.innerHTML += `<div class="chat-bubble bot">${reply}</div>`;
+        stream.scrollTop = stream.scrollHeight;
+      }, 500);
+    }
+  </script>
+</body>
+</html>
