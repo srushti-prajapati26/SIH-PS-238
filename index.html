@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoTA Unified Scholarship Portal | PS No. 2026238</title>
+  <title>Vidya Setu | Scholarships and Student Support</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -123,6 +123,37 @@
       margin-bottom: 12px;
       border: 2px solid #E2E8F0;
     }
+    .brand-logo {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 12px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background: white;
+      color: var(--primary-navy);
+      border: 2px solid var(--primary-saffron);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .brand-logo::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      width: 24px;
+      height: 9px;
+      border: 2px solid var(--primary-saffron);
+      border-bottom: 0;
+      border-radius: 20px 20px 0 0;
+    }
+    .brand-logo span { margin-top: 12px; font-size: 19px; font-weight: 800; }
+    .brand-logo.small { width: 36px; height: 36px; margin: 0; border-radius: 11px; box-shadow: none; }
+    .brand-logo.small::before { top: 4px; width: 14px; height: 5px; border-width: 1px; }
+    .brand-logo.small span { margin-top: 7px; font-size: 11px; }
+    .title-group { display: flex; align-items: center; gap: 9px; }
+    .brand-copy { text-align: center; }
+    .brand-copy h1 { font-size: 19px; color: var(--primary-navy); font-weight: 800; }
+    .brand-copy p { font-size: 11px; color: var(--text-muted); font-weight: 600; }
     .login-tabs {
       display: flex;
       width: 100%;
@@ -477,8 +508,11 @@
     <!-- App Bar (Hidden on Login screen, visible once authenticated) -->
     <div class="app-header" id="main-app-header" style="display:none;">
       <div class="title-group">
-        <h2>Ministry of Tribal Affairs</h2>
-        <p>PS No. 2026238 • Unified Scholarship Portal</p>
+        <div class="brand-logo small" aria-hidden="true"><span>VS</span></div>
+        <div>
+          <h2>Vidya Setu</h2>
+          <p>Scholarships and student support</p>
+        </div>
       </div>
       <div class="header-actions">
         <div class="pvtg-chip" id="header-category-badge">PVTG Priority</div>
@@ -493,13 +527,12 @@
     <!-- ============================================== -->
     <div id="screen-login" class="screen-body active">
       <div class="login-container">
-        <!-- National Emblem Motif -->
-        <div class="emblem-circle">🏛️</div>
-        <h2 style="font-size:16px; color:var(--primary-navy); font-weight:800; margin-bottom:2px;">जनजातीय कार्य मंत्रालय</h2>
-        <p style="font-size:12px; color:var(--text-muted); font-weight:600;">Ministry of Tribal Affairs, Govt of India</p>
-        <span style="font-size:10px; background:#FEF3C7; color:#92400E; padding:2px 8px; border-radius:12px; font-weight:700; margin-top:6px;">
-          PS No. 2026238 • Unified Scholarship Portal
-        </span>
+        <div class="brand-logo" role="img" aria-label="Vidya Setu logo"><span>VS</span></div>
+        <div class="brand-copy">
+          <h1>विद्या सेतु · Vidya Setu</h1>
+          <p>Scholarships and student support</p>
+        </div>
+        <p style="font-size:10px; color:var(--text-muted); font-weight:600; margin-top:4px;">Ministry of Tribal Affairs · Government of India</p>
 
         <!-- Login vs Register Tab Switcher -->
         <div class="login-tabs">
@@ -628,6 +661,9 @@
           <span>DBT Status</span>
         </div>
       </div>
+      <button class="btn btn-green" onclick="openScreen('screen-verify-document')" style="margin-bottom:14px;">
+        Add document photo &amp; view demo result →
+      </button>
 
       <!-- Big Check & Apply Banner -->
       <div style="background:linear-gradient(135deg, #1E3A8A 0%, #0D254C 100%); color:white; border-radius:14px; padding:14px; margin-bottom:14px;">
@@ -669,6 +705,44 @@
 
       <div id="dashboard-schemes-preview">
         <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- DOCUMENT PHOTO DEMO VERIFICATION -->
+    <!-- ============================================== -->
+    <div id="screen-verify-document" class="screen-body">
+      <h3 style="font-size:15px; color:var(--primary-navy); margin-bottom:6px;">Add a document photo</h3>
+      <p style="font-size:11px; color:var(--text-muted); margin-bottom:14px;">Choose a document type and attach a clear image for a profile-based demo check.</p>
+      <div class="card">
+        <div class="form-group">
+          <label for="verify-document-type">Document type</label>
+          <select id="verify-document-type">
+            <option>Caste / ST certificate</option>
+            <option>Income certificate</option>
+            <option>Aadhaar card</option>
+            <option>Academic marksheet</option>
+            <option>Bank passbook</option>
+            <option>Other document</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="verify-document-photo">Photo</label>
+          <input id="verify-document-photo" type="file" accept="image/*" capture="environment" onchange="previewVerificationPhoto(event)">
+        </div>
+        <img id="verify-photo-preview" alt="Selected document preview" style="display:none; max-width:100%; max-height:230px; margin:8px auto; border-radius:8px; object-fit:contain;">
+        <p id="verify-photo-name" style="font-size:10px; color:var(--text-muted); overflow-wrap:anywhere;"></p>
+        <button class="btn btn-green" onclick="runVerificationPhotoCheck()">Run demo check</button>
+      </div>
+      <div id="verify-result" class="card" style="display:none; border-color:#86EFAC;">
+        <div class="card-header">
+          <strong style="color:var(--primary-navy);">Demo result</strong>
+          <span class="badge badge-green">Profile check complete</span>
+        </div>
+        <p style="font-size:11px; margin-bottom:6px;">Document: <strong id="verify-result-type"></strong></p>
+        <p style="font-size:11px; margin-bottom:6px;">Student: <strong id="verify-result-student"></strong></p>
+        <p style="font-size:11px; margin-bottom:6px;">Saved profile: <strong id="verify-result-profile"></strong></p>
+        <p style="font-size:10px; color:var(--text-muted); margin-top:10px;">Photo is not uploaded or analyzed. This result uses simulated profile data, not a government verification.</p>
       </div>
     </div>
 
@@ -1566,6 +1640,33 @@
       openScreen('screen-tracker');
     }
 
+    function previewVerificationPhoto(event) {
+      const file = event.target.files && event.target.files[0];
+      const preview = document.getElementById('verify-photo-preview');
+      const result = document.getElementById('verify-result');
+      if (!file) return;
+      if (preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      preview.dataset.objectUrl = objectUrl;
+      preview.src = objectUrl;
+      preview.style.display = 'block';
+      document.getElementById('verify-photo-name').textContent = file.name;
+      result.style.display = 'none';
+    }
+
+    function runVerificationPhotoCheck() {
+      const fileInput = document.getElementById('verify-document-photo');
+      if (!fileInput.files || !fileInput.files[0]) {
+        alert('Add a document photo before running the demo check.');
+        return;
+      }
+      document.getElementById('verify-result-type').textContent = document.getElementById('verify-document-type').value;
+      document.getElementById('verify-result-student').textContent = currentStudent.fullName;
+      document.getElementById('verify-result-profile').textContent = `${currentStudent.community} · ${currentStudent.institution}`;
+      document.getElementById('verify-result').style.display = 'block';
+      document.getElementById('verify-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
     // ===================================
     // SCREEN SWITCHING & NAVIGATION
     // ===================================
@@ -1573,6 +1674,11 @@
       document.querySelectorAll('.screen-body').forEach(el => el.classList.remove('active'));
       const target = document.getElementById(screenId);
       if (target) target.classList.add('active');
+
+      const chatFab = document.getElementById('main-chat-fab');
+      if (chatFab && screenId !== 'screen-login') {
+        chatFab.style.display = screenId === 'screen-chat' ? 'none' : 'flex';
+      }
 
       document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
       if(screenId === 'screen-dashboard') document.querySelectorAll('.nav-tab')[0].classList.add('active');
@@ -1609,6 +1715,8 @@
           reply = `Based on your live profile, you qualify for:<br>• <strong>${eligList.join('<br>• ')}</strong><br><br>Tap the <strong>Apply</strong> tab to fill out your application with zero redundant typing!`;
         } else if(lower.includes("dbt") || lower.includes("payment") || lower.includes("भुगतान")) {
           reply = `Your scholarship has been sanctioned and routed through PFMS direct benefit transfer to your Aadhaar-linked account at <strong>${currentStudent.bankName} (${currentStudent.accountNumber})</strong>!`;
+        } else if(lower.includes("verify") || lower.includes("photo") || lower.includes("upload") || lower.includes("सत्यापन") || lower.includes("फोटो")) {
+          reply = `Add a document photo for a profile-based demo check. The image is not uploaded or analyzed.<br><br><button class="btn btn-green" style="padding:8px 10px; font-size:11px;" onclick="openScreen('screen-verify-document')">Add document photo</button>`;
         } else if(lower.includes("form") || lower.includes("apply") || lower.includes("आवेदन")) {
           reply = `You can fill out your scholarship application right now in the <strong>Apply</strong> tab! All your verified Aadhaar, ST/PVTG caste, and DigiLocker documents are pre-filled automatically.`;
         } else if(lower.includes("document") || lower.includes("wallet") || lower.includes("दस्तावेज")) {

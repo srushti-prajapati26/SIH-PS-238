@@ -1,4 +1,4 @@
-# PS No. 2026238: Unified Scholarship Mobile Application for Tribal Students
+# Vidya Setu: Scholarship Support for Tribal Students
 ### Ministry of Tribal Affairs (MoTA), Government of India
 > **One App | Five Schemes | Single View | Seamless Verification | Direct Benefit Transfer**  
 > *"Ensuring no ST student is left behind"*
@@ -7,7 +7,7 @@
 
 ## 🏛️ Project Architecture Overview
 
-This project implements the end-to-end architecture specified in **PS No. 2026238** for tribal students across India:
+Vidya Setu brings scholarship discovery, applications, document guidance, and payment tracking together for tribal students across India:
 
 ```
                              ST STUDENT (Beneficiary)

@@ -1,5 +1,5 @@
-name: mota_unified_scholarship
-description: "Unified Scholarship Mobile Application for Tribal Students - Ministry of Tribal Affairs, GoI"
+name: vidya_setu
+description: "Vidya Setu scholarship and student support application"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   provider: ^6.1.2
   intl: ^0.19.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
