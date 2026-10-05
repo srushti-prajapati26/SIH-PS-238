@@ -123,18 +123,63 @@ Vidya Setu brings scholarship discovery, applications, document guidance, and pa
 ### 1. Flutter Mobile App (Android / iOS / Web / Desktop)
 ```bash
 # Navigate to the project directory
-cd "C:\Users\SHUBHAM JHA\.gemini\antigravity\scratch\mota_unified_scholarship"
+🚀 Method 1 — Flutter App Run Karna
+Step 1: Project folder open karo
+Sabse pehle apna Flutter project jis folder mein hai, usko locate karo.
 
+Example:
+C:\Users\YourName\Desktop\VidyaSetu
+Project ke andar normally ye files/folders hone chahiye:
+VidyaSetu/
+├── android/
+├── ios/
+├── lib/
+├── web/
+├── pubspec.yaml
+└── ...
+Important: pubspec.yaml jis folder mein hai, wahi tumhara main Flutter project folder hai.
+
+Step 2: VS Code mein project open karo
+VS Code kholo
+File → Open Folder
+Aur apna project folder select karo.
+Step 3: Terminal open karo
+VS Code mein:
+Terminal → New Terminal
+Ya shortcut:
+Ctrl + `
+Terminal mein check karo ki tum project folder ke andar ho.
+
+For example:
+PS C:\Users\YourName\Desktop\VidyaSetu>
+Agar project folder mein nahi ho, to:
+cd "C:\Users\YourName\Desktop\VidyaSetu"
+
+Step 4: Packages download karo
+Terminal mein ye command run karo:
+flutter pub get
+Wait karo jab tak command complete nahi hoti.
+Agar successful hua to Flutter dependencies/packages download ho jayenge.
+Step 5: Flutter devices check karo
+flutter devices
+-----------------------------------------------------------------------------------------------
 # Fetch packages
 flutter pub get
 
 # Run on connected device or emulator
 flutter run
 ```
-
+Step 7: Agar mobile mein run karna hai
+Apna Android phone laptop se USB cable se connect karo.
+Phone mein:
+Settings → Developer Options → USB Debugging → ON
+Phir terminal mein:
+"flutter devices"
+Agar tumhara phone list mein aa gaya, toh:
+"flutter run"
+Bas! App phone mein run ho jayegi. ✅
 ### 2. Standalone Interactive Live Simulation
 You can open `web_preview/index.html` in any web browser to interactively test the complete 6-stage lifecycle, JAGO Chatbot, and Unreached Beneficiaries discovery engine immediately:
 ```bash
 # Open directly in default browser on Windows
-Start-Process "C:\Users\SHUBHAM JHA\.gemini\antigravity\scratch\mota_unified_scholarship\web_preview\index.html"
-```
+  
